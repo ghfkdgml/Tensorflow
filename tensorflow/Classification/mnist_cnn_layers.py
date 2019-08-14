@@ -5,7 +5,7 @@ mnist = input_data.read_data_sets("MNIST_DATA/", one_hot=True)
 
 #global variables
 learning_rate = 0.001
-training_epochs = 15
+training_epochs = 5
 batch_size = 100
 
 class Model:
@@ -37,8 +37,13 @@ class Model:
             pool3 = tf.layers.max_pooling2d(inputs=conv3, pool_size=[2,2], padding="SAME", strides=2)
             dropout3 = tf.layers.dropout(inputs=pool3, rate=0.3, training=self.training)
 
+            #Layer 4
+            conv4 = tf.layers.conv2d(inputs=dropout3, filters=128, kernel_size=[3,3], padding="SAME", activation=tf.nn.relu)
+            pool4 = tf.layers.max_pooling2d(inputs=conv4, pool_size=[2,2], padding="SAME", strides=2)
+            dropout4 = tf.layers.dropout(inputs=pool4, rate=0.3, training=self.training)
+
             #Dense Layer with Relu
-            flat = tf.reshape(dropout3, [-1,128*4*4])
+            flat = tf.reshape(dropout4, [-1,128*2*2])
             dense4 = tf.layers.dense(inputs=flat, units=625, activation=tf.nn.relu)
             dropout4 = tf.layers.dropout(inputs=dense4, rate=0.5, training=self.training)
             

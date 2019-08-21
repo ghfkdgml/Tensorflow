@@ -5,7 +5,7 @@ xy = np.loadtxt('data4_zoo.csv', delimiter=',', dtype=np.float32)
 xData = xy[:,:-1]
 yData = xy[:,[-1]]
 
-TrainNum = 10000         #the number of training
+TrainNum = 100         #the number of training
 nb_classes = 7
 def LogisticRegression():
     W = tf.Variable(tf.random_normal([16,nb_classes]),name='weight')

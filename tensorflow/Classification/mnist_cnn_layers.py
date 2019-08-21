@@ -46,7 +46,6 @@ class Model:
             flat = tf.reshape(dropout4, [-1,128*2*2])
             dense4 = tf.layers.dense(inputs=flat, units=625, activation=tf.nn.relu)
             dropout4 = tf.layers.dropout(inputs=dense4, rate=0.5, training=self.training)
-            
             self.logits = tf.layers.dense(inputs=dropout4, units=10)
 
         self.cost = tf.reduce_mean(tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.Y))
@@ -86,5 +85,3 @@ print('Learning Finished!')
 
 # Test model and check accuracy
 print('Accuracy:', m1.get_accuracy(mnist.test.images, mnist.test.labels))
-
-

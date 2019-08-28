@@ -16,24 +16,24 @@ def data_preprocess(data):
 
     #seperate with ages in a new group
     train['Age'] = train['Age'].fillna(-0.5)
-    bins = [-1,0,5,12,18,24,35,60,np.inf]
-    labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Adult', 'Senior']
+    bins = [-1,0,5,12,18,24,35,45,55,65,np.inf]
+    labels = ['Unknown', 'Baby', 'Child', 'Teenager', 'Student', 'Young Adult', 'Middle Adult', 'Adult','Young Senior', 'Senior']
     train['AgeGroup'] = pd.cut(train['Age'], bins, labels = labels)
-    age_map = {'Baby':1, 'Child':2, 'Teenager':3, 'Student':4, 'Young Adult':5, 'Adult':6, 'Senior':7,'Unknown':0}
+    age_map = {'Baby':1, 'Child':2, 'Teenager':3, 'Student':4, 'Young Adult':5, 'Middle Adult':6,'Adult':7, 'Young Senior':8,'Senior':9,'Unknown':0}
     train['AgeGroup'] = train['AgeGroup'].map(age_map)
     train = train.drop(['Age'],axis=1)
     
     #Name process
     train['Title'] = train.Name.str.extract(' ([A-Za-z]+)\.', expand=False)
-    train['Title'] = train['Title'].replace(['Lady','Capt','Col','Don','Dr','Major','Rev','Jonkheer','Dona'],'Rare')
-    train['Title'] = train['Title'].replace(['Countess','Sir'],'Master')
+    train['Title'] = train['Title'].replace(['Lady','Don','Jonkheer'],'Rare')
+    train['Title'] = train['Title'].replace(['Capt','Col','Dr','Major','Rev','Dona'],'Officer')
+    train['Title'] = train['Title'].replace(['Countess','Sir'],'Rare')
     train['Title'] = train['Title'].replace('Ms','Miss')
     train['Title'] = train['Title'].replace('Mlle','Miss')
     train['Title'] = train['Title'].replace('Mme','Mrs')
-    title_map = {"Mr": 1, "Miss":2, "Mrs":3, "Master":4, "Rare":5}
+    title_map = {"Mr": 1, "Miss":2, "Mrs":3, "Master":4, "Rare":5,'Officer':6}
     train['Title'] = train["Title"].map(title_map)
     train = train.drop(['Name'],axis=1)
-    
     train['FareRange'] = pd.qcut(train['Fare'],4,labels = [1,2,3,4])
     train = train.drop(['Fare'],axis=1)
     return train
@@ -91,7 +91,7 @@ print(score)
 
 test_data = data_preprocess('test.csv')
 test_data = test_data.fillna({"FareRange":1})
-#test_data = test.drop('Survived', axis=1)
+#test_data = test_data.drop('Survived', axis=1)
 prediction = clf.predict(test_data)
 submission = pd.DataFrame({
     "PassengerId": test_data["PassengerId"],
@@ -101,6 +101,3 @@ submission.to_csv('submission.csv', index=False)
 
 submission = pd.read_csv('submission.csv')
 print(submission.head())
-#
-#prediction = clf.predict(test_data)
-#result = pd.DataFram({"PassengerId":

@@ -7,7 +7,7 @@ Suho's Machine Learning test code Repo
 
 # 구성
 - Classification
- + classfication 관련 코드(mnist 관련, softmax 등)
+  + classfication 관련 코드(mnist 관련, softmax 등)
  
 - kaggle
   + 케글에 제출한 코드
